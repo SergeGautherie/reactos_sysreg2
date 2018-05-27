@@ -16,6 +16,17 @@ install:
 build_script:
   - sh: make
 
-test: off
+before_test:
+  - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install libvirt-bin qemu-kvm > /dev/null
+ # "The user `appveyor' is already a member of `libvirtd'."
+#   - sh: sudo adduser $USER libvirtd
+#
+# 
+  - sh: touch bootcdregtest.iso
+# 
+  - sh: ll bootcdregtest.iso
+
+test_script:
+  - sh: ./sysreg2  || echo {sysreg2} ExitStatus = $?
 
 deploy: off

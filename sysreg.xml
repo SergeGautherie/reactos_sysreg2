@@ -1,4 +1,4 @@
-<settings vm="ReactOS" file="/opt/buildbot/sysreg2/reactos.xml">
+<settings vm="ReactOS" file="/sysreg2_workdir/reactos.xml">
 	<general>
 		<!-- Use KVM, VMwarePlayer or VirtualBox -->
 		<vm type="kvm"/>
