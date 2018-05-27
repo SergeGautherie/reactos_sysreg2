@@ -8,6 +8,10 @@ clone_folder: /sysreg2_workdir
 install:
   - sh: sudo apt-get -q=2 update
   - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install libvirt-dev libxml2-dev > /dev/null
+#
+#   - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install cpu-checker > /dev/null
+ # "INFO: Your CPU does not support KVM extensions" + "KVM acceleration can NOT be used"
+#   - sh: sudo /usr/sbin/kvm-ok  || echo {kvm-ok} ExitStatus = $?
 
 build_script:
   - sh: make
