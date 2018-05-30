@@ -19,7 +19,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
     int got;
     int Ret = EXIT_DONT_CONTINUE;
     int ttyfd;
-    struct termios ttyattr, rawattr;
+//    struct termios ttyattr, rawattr;
     unsigned int CacheHits = 0;
     unsigned int i;
     unsigned int KdbgHit = 0;
@@ -59,8 +59,10 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
     }
 
     /* We also monitor STDIN_FILENO, so a user can cancel the process with ESC */
+/*
     if (tcgetattr(STDIN_FILENO, &ttyattr) < 0)
     {
+// AppVeyor: "tcgetattr failed with error 25".
         SysregPrintf("tcgetattr failed with error %d\n", errno);
         close(ttyfd);
         return Ret;
@@ -80,11 +82,12 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
         close(ttyfd);
         return Ret;
     }
+*/
 
     for(;;)
     {
         struct pollfd fds[] = {
-            { STDIN_FILENO, POLLIN, 0 },
+//            { STDIN_FILENO, POLLIN, 0 },
             { ttyfd, POLLIN | POLLHUP | POLLERR, 0 },
         };
 
@@ -333,7 +336,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
 
 
 cleanup:
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &ttyattr);
+//    tcsetattr(STDIN_FILENO, TCSAFLUSH, &ttyattr);
     close(ttyfd);
 
     return (CheckpointReached ? EXIT_CHECKPOINT_REACHED : Ret);
