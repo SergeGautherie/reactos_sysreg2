@@ -28,4 +28,3 @@ void VMWarePlayer::CloseSerialPort()
     close(AppSettings.Specific.VMwarePlayer.Socket);
     unlink(AppSettings.Specific.VMwarePlayer.Path);
 }
-

@@ -44,11 +44,9 @@ int main(int argc, char **argv)
         case TYPE_KVM:
             TestMachine = new KVM();
             break;
-
         case TYPE_VMWARE_PLAYER:
             TestMachine = new VMWarePlayer();
             break;
-
         case TYPE_VIRTUALBOX:
             TestMachine = new VirtualBox();
             break;
@@ -148,11 +146,9 @@ cleanup:
         case EXIT_CHECKPOINT_REACHED:
             SysregPrintf("Status: Reached the checkpoint!\n");
             break;
-
         case EXIT_CONTINUE:
             SysregPrintf("Status: Failed to reach the checkpoint!\n");
             break;
-
         case EXIT_DONT_CONTINUE:
             SysregPrintf("Status: Testing process aborted!\n");
             break;
