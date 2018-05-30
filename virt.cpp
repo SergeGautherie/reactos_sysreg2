@@ -144,7 +144,7 @@ cleanup:
     switch (Ret)
     {
         case EXIT_CHECKPOINT_REACHED:
-            SysregPrintf("Status: Reached the checkpoint!\n");
+            SysregPrintf("Status: Reached the checkpoint.\n");
             break;
         case EXIT_CONTINUE:
             SysregPrintf("Status: Failed to reach the checkpoint!\n");
