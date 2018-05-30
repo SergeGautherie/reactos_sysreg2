@@ -50,13 +50,19 @@ bool LoadSettings(const char* XmlConfig)
     if (obj)
         xmlXPathFreeObject(obj);
 
+    AppSettings.VMType = TYPE_KVM; // Default.
     obj = xmlXPathEval(BAD_CAST"string(/settings/general/vm/@type)",ctxt);
-    if ((obj != NULL) && (obj->type == XPATH_STRING))
+    if ((obj != NULL) && (obj->type == XPATH_STRING)) // ToDo: split and warn.
     {
         if (xmlStrcasecmp(obj->stringval, BAD_CAST"vmwareplayer") == 0)
             AppSettings.VMType = TYPE_VMWARE_PLAYER;
         else if (xmlStrcasecmp(obj->stringval, BAD_CAST"virtualbox") == 0)
             AppSettings.VMType = TYPE_VIRTUALBOX;
+        else if (xmlStrcasecmp(obj->stringval, BAD_CAST"kvm") != 0)
+        {
+            xmlXPathFreeObject(obj);
+            return false;
+        }
     }
     if (obj)
         xmlXPathFreeObject(obj);
