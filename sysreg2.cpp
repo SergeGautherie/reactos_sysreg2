@@ -42,12 +42,15 @@ int main(int argc, char **argv)
     switch (AppSettings.VMType)
     {
         case TYPE_KVM:
+            SysregPrintf("Info: AppSettings.VMType = TYPE_KVM\n");
             TestMachine = new KVM();
             break;
         case TYPE_VMWARE_PLAYER:
+            SysregPrintf("Info: AppSettings.VMType = TYPE_VMWARE_PLAYER\n");
             TestMachine = new VMWarePlayer();
             break;
         case TYPE_VIRTUALBOX:
+            SysregPrintf("Info: AppSettings.VMType = TYPE_VIRTUALBOX\n");
             TestMachine = new VirtualBox();
             break;
     }
