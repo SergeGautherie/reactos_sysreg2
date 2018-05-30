@@ -1,5 +1,8 @@
 image: Ubuntu
 
+environment:
+  ROS_WGET_BOOTCDREGTEST: https://iso.reactos.org/bootcdregtest/reactos-bootcdregtest-0.4.10-dev-121-gbd2f3d3-x86-gcc-lin-dbg.iso
+
 version: sysreg2.appveyor.{build}
 skip_branch_with_pr: true
 clone_depth: 5
@@ -23,8 +26,10 @@ before_test:
 #
 #   - sh: ll /usr/bin
 #
-# 
-  - sh: touch bootcdregtest.iso
+#   - sh: touch bootcdregtest.iso
+#
+  - sh: wget --no-verbose --output-document=bootcdregtest.iso "$ROS_WGET_BOOTCDREGTEST"
+#
 # 
   - sh: ll bootcdregtest.iso
 
