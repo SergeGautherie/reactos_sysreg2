@@ -42,7 +42,7 @@ bool KVM::GetConsole(char* console)
 
     obj = xmlXPathEval(BAD_CAST "string(/domain/devices/console/@tty)", ctxt);
     if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                         (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                          (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
     {
         strcpy(console, (char *)obj->stringval);
         RetVal = true;

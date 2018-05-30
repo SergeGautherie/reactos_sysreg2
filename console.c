@@ -29,7 +29,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
     bool CheckpointReached = false;
 
     /* Initialize CacheBuffer with an empty string */
-    *CacheBuffer = 0;
+    *CacheBuffer = '\0';
 
     if (AppSettings.VMType == TYPE_VMWARE_PLAYER || AppSettings.VMType == TYPE_VIRTUALBOX)
     {
@@ -167,7 +167,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                 else
                 {
                     /* Null-terminate the line */
-                    bp[1] = 0;
+                    bp[1] = '\0';
 
                     /* Break on newlines or in case of KDBG messages (which aren't terminated by newlines) */
                     if(*bp == '\n')
@@ -178,7 +178,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                         /* Set EOL */
                         ++bp;
                         *bp = '\n';
-                        bp[1] = 0;
+                        bp[1] = '\0';
                         break;
                     }
 
@@ -233,7 +233,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
             {
                 CacheHits = 0;
                 memcpy(CacheBuffer, Buffer, bp - Buffer + 1);
-                CacheBuffer[bp - Buffer + 1] = 0;
+                CacheBuffer[bp - Buffer + 1] = '\0';
             }
 
             /* Output the line, raddr2line the included addresses if necessary */

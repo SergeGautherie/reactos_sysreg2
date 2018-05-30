@@ -14,7 +14,7 @@ VMWarePlayer::VMWarePlayer()
 
 bool VMWarePlayer::GetConsole(char* console)
 {
-    console[0] = 0;
+    console[0] = '\0';
     return true;
 }
 

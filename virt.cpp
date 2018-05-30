@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     char console[50];
     unsigned int Retries;
     unsigned int Stage;
-    Machine * TestMachine = 0;
+    Machine * TestMachine = NULL;
 
     /* Get the output path to the built ReactOS files */
     OutputPath = getenv("ROS_OUTPUT");
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     for(Stage = 0; Stage < NUM_STAGES; Stage++)
     {
         /* Execute hook command before stage if any */
-        if (AppSettings.Stage[Stage].HookCommand[0] != 0)
+        if (AppSettings.Stage[Stage].HookCommand[0] != '\0')
         {
             SysregPrintf("Applying hook: %s\n", AppSettings.Stage[Stage].HookCommand);
             int out = Execute(AppSettings.Stage[Stage].HookCommand);

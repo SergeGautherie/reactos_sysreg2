@@ -34,7 +34,7 @@ bool LoadSettings(const char* XmlConfig)
 
     obj = xmlXPathEval(BAD_CAST"string(/settings/@file)",ctxt);
     if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                    (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                          (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
     {
         strncpy(AppSettings.Filename, (char *)obj->stringval, 254);
     }
@@ -43,7 +43,7 @@ bool LoadSettings(const char* XmlConfig)
 
     obj = xmlXPathEval(BAD_CAST"string(/settings/@vm)",ctxt);
     if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                     (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                          (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
     {
         strncpy(AppSettings.Name, (char *)obj->stringval, 79);
     }
@@ -71,7 +71,7 @@ bool LoadSettings(const char* XmlConfig)
     {
         obj = xmlXPathEval(BAD_CAST"string(/settings/general/vm/@serial)",ctxt);
         if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                              (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                              (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
         {
             strcpy(AppSettings.Specific.VMwarePlayer.Path, (char *)obj->stringval);
         }
@@ -142,7 +142,7 @@ bool LoadSettings(const char* XmlConfig)
         strcat(TempStr, "/@bootdevice)");
         obj = xmlXPathEval((xmlChar*) TempStr,ctxt);
         if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                              (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
         {
             strncpy(AppSettings.Stage[Stage].BootDevice, (char *)obj->stringval, 7);
         }
@@ -154,7 +154,7 @@ bool LoadSettings(const char* XmlConfig)
         strcat(TempStr, "/@hookcommand)");
         obj = xmlXPathEval((xmlChar*) TempStr,ctxt);
         if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                              (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
         {
             strncpy(AppSettings.Stage[Stage].HookCommand, (char *)obj->stringval, 254);
         }
@@ -166,7 +166,7 @@ bool LoadSettings(const char* XmlConfig)
         strcat(TempStr, "/success/@on)");
         obj = xmlXPathEval((xmlChar*) TempStr,ctxt);
         if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-            (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                              (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
         {
             strncpy(AppSettings.Stage[Stage].Checkpoint, (char *)obj->stringval, 79);
         }
@@ -188,7 +188,7 @@ bool LoadSettings(const char* XmlConfig)
 
     obj = xmlXPathEval(BAD_CAST"string(/domain/devices/disk[@device='disk']/source/@file)",ctxt);
     if ((obj != NULL) && ((obj->type == XPATH_STRING) &&
-                     (obj->stringval != NULL) && (obj->stringval[0] != 0)))
+                          (obj->stringval != NULL) && (obj->stringval[0] != '\0')))
     {
         strncpy(AppSettings.HardDiskImage, (char *)obj->stringval, 254);
     }

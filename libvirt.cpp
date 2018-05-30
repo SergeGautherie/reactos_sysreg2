@@ -26,7 +26,7 @@ bool LibVirt::IsMachineRunning(const char* name, bool destroy)
     virDomainPtr vDomPtr = NULL;
 
     vDomPtr = virDomainLookupByName(vConn, name);
-    if (vDomPtr == 0)
+    if (vDomPtr == NULL)
         return false;
 
     Ret = (virDomainIsActive(vDomPtr) == 1);
