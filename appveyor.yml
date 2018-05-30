@@ -21,6 +21,8 @@ before_test:
  # "The user `appveyor' is already a member of `libvirtd'."
 #   - sh: sudo adduser $USER libvirtd
 #
+#   - sh: ll /usr/bin
+#
 # 
   - sh: touch bootcdregtest.iso
 # 
