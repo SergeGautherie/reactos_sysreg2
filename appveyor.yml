@@ -2,6 +2,7 @@ image: Ubuntu
 
 environment:
   ROS_WGET_BOOTCDREGTEST: https://iso.reactos.org/bootcdregtest/reactos-bootcdregtest-0.4.10-dev-121-gbd2f3d3-x86-gcc-lin-dbg.iso
+  ROS_WGET_LOG2LINES: https://ci.appveyor.com/api/buildjobs/p2xv9370w47k2yc8/artifacts/log2lines-542-8f48ddc-gcc
 
 version: sysreg2.appveyor.{build}
 skip_branch_with_pr: true
@@ -21,6 +22,11 @@ install:
 build_script:
   - sh: make
 
+after_build:
+  - sh: chmod u-w,go-x sysreg2
+# 
+  - sh: ll sysreg2
+
 before_test:
   - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install libvirt-bin qemu-kvm > /dev/null
  # "The user `appveyor' is already a member of `libvirtd'."
@@ -31,9 +37,12 @@ before_test:
 #   - sh: touch bootcdregtest.iso
 #
   - sh: wget --no-verbose --output-document=bootcdregtest.iso "$ROS_WGET_BOOTCDREGTEST"
+  - sh: chmod u-w bootcdregtest.iso
 #
+  - sh: wget --no-verbose --output-document=log2lines "$ROS_WGET_LOG2LINES"
+  - sh: chmod u-w+x log2lines
 # 
-  - sh: ll bootcdregtest.iso
+  - sh: ll bootcdregtest.iso log2lines
 
 test_script:
   - sh: ./sysreg2  || echo {sysreg2} ExitStatus = $?
