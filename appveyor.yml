@@ -11,6 +11,9 @@ clone_folder: /sysreg2_workdir
 
 # /sysreg2_workdir : all-in-one
 
+init:
+  - sh: env | sort
+
 install:
   - sh: sudo apt-get -q=2 update
   - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install libvirt-dev libxml2-dev > /dev/null
