@@ -24,6 +24,7 @@ build_script:
 
 after_build:
   - sh: chmod u-w,go-x sysreg2
+#
 # 
   - sh: ll sysreg2
 
@@ -41,10 +42,21 @@ before_test:
 #
   - sh: wget --no-verbose --output-document=log2lines "$ROS_WGET_LOG2LINES"
   - sh: chmod u-w+x log2lines
+#
 # 
   - sh: ll bootcdregtest.iso log2lines
 
 test_script:
-  - sh: ./sysreg2  || echo {sysreg2} ExitStatus = $?
+#   - sh: ./sysreg2  || echo {sysreg2} ExitStatus = $?
+#
+  - sh: ./log2lines -h  || echo {log2lines} ExitStatus = $?
+  - sh: ./log2lines -d bootcdregtest.iso -F
+ # "time  ": to try later...
+#
+  - sh: ./sysreg2 | ./log2lines -d bootcdregtest.iso -m -M -s -U
+  - sh: echo {sysreg2 log2lines} ExitStatus = "${PIPESTATUS[@]}"
+#
+#   - sh: set -o pipefail
+#   - sh: ./sysreg2  | ./log2lines  || echo {sysreg2-log2lines} ExitStatus = $?
 
 deploy: off
