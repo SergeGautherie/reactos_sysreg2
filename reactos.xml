@@ -1,3 +1,8 @@
+<!--
+AppVeyor, 'kvm':
+libvirt: QEMU Driver error : internal error: QEMU / QMP failed: Could not access KVM kernel module: No such file or directory
+failed to initialize KVM: No such file or directory
+-->
 <domain type='qemu'>
   <name>ReactOS-AppVeyor</name>
   <uuid>0ab69219-58c2-1e5c-6beb-fb29db74b0af</uuid>
