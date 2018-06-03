@@ -20,7 +20,7 @@ init:
 # 
   - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 #
-  - sh: env | sort
+#   - sh: env | sort
 
 install:
   - sh: sudo apt-get -q=2 update
@@ -54,13 +54,13 @@ before_test:
   - sh: wget --no-verbose --output-document=log2lines "$ROS_WGET_LOG2LINES"
   - sh: chmod u-w+x log2lines
 #
+#   - sh: ll
 # 
   - sh: ll bootcdregtest.iso log2lines
 
 test_script:
 #   - sh: ./sysreg2  || echo {sysreg2} ExitStatus = $?
-#
-  - sh: ./log2lines -h  || echo {log2lines} ExitStatus = $?
+#   - sh: ./log2lines -h  || echo {log2lines} ExitStatus = $?
   - sh: ./log2lines -d bootcdregtest.iso -F
  # "usage" :-/   - sh: ./sysreg2 | ./log2lines -d bootcdregtest.iso -L log2lines.log -m -M -s -U
  # "time  ": to try later...
