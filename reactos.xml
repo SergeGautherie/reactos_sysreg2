@@ -25,11 +25,11 @@ failed to initialize KVM: No such file or directory
   <devices>
     <emulator>/usr/bin/qemu-system-i386</emulator>
     <disk type='file' device='disk'>
-      <source file='/sysreg2_workdir/ros-sysreg.img'/>
+      <source file='/sysreg2_workdir/TestRun/ros-sysreg.img'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <disk type='file' device='cdrom'>
-      <source file='/sysreg2_workdir/bootcdregtest.iso'/>
+      <source file='/sysreg2_workdir/TestRun/bootcdregtest.iso'/>
       <target dev='hdc' bus='ide'/>
       <readonly/>
     </disk>
