@@ -1,16 +1,20 @@
 <settings vm="ReactOS-AppVeyor" file="/sysreg2_workdir/reactos.xml">
 	<general>
 		<!-- Use KVM, VMwarePlayer or VirtualBox -->
-		<vm type="kvm"/>
+		<vm type="KVM"/>
 
 		<!-- kill the VM after n milliseconds without debug msg -->
+		<!-- 180000 = 3 min -->
 		<timeout ms="180000"/>
 
 		<!-- kill the test process if it takes more than n seconds
 		     The VM will be killed even if it is still verbose -->
-		<globaltimeout s="3600"/>
+		<!-- 3600 = 1 h -->
+		<!-- 3300 = 55 min -->
+		<globaltimeout s="3300"/>
 
 		<!-- size of the hdd image in MB -->
+		<!-- 2048 = 2 GiB -->
 		<hdd size="2048"/>
 
 		<!-- Maximum number of line cache hits allowed before we cancel this test and proceed with the next one.
@@ -18,16 +22,16 @@
 		<maxcachehits value="2000" />
 
 		<!-- Maximum number of retries allowed before we cancel the entire testing process. -->
-		<maxretries value="15" />
+		<maxretries value="3" />
 
 		<!-- Maximum number of cont that sysreg will issue after a bt during the whole life of an instance -->
-		<maxconts value="5" />
+		<maxconts value="0" />
 	</general>
 	<firststage bootdevice="cdrom">
 	</firststage>
-	<secondstage bootdevice="cdrom">
+	<secondstage bootdevice="hd">
 	</secondstage>
-	<thirdstage bootdevice="cdrom">
+	<thirdstage bootdevice="hd">
 		<success on="SYSREG_CHECKPOINT:THIRDBOOT_COMPLETE"/>
 	</thirdstage>
 </settings>
