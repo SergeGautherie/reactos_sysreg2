@@ -54,12 +54,16 @@ test_script:
 #
   - sh: ./log2lines -h  || echo {log2lines} ExitStatus = $?
   - sh: ./log2lines -d bootcdregtest.iso -F
+ # "usage" :-/   - sh: ./sysreg2 | ./log2lines -d bootcdregtest.iso -L log2lines.log -m -M -s -U
  # "time  ": to try later...
 #
-  - sh: ./sysreg2 | ./log2lines -d bootcdregtest.iso -m -M -s -U
+  - sh: ./sysreg2 | ./log2lines -d bootcdregtest.iso -m -M -s -U > log2lines.log
   - sh: echo {sysreg2 log2lines} ExitStatus = "${PIPESTATUS[@]}"
 #
 #   - sh: set -o pipefail
 #   - sh: ./sysreg2  | ./log2lines  || echo {sysreg2-log2lines} ExitStatus = $?
+
+after_test:
+  - sh: appveyor PushArtifact log2lines.log
 
 deploy: off
