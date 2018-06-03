@@ -9,9 +9,15 @@
 
 		<!-- kill the test process if it takes more than n seconds
 		     The VM will be killed even if it is still verbose -->
+		<!-- Les HS (timeout non pris en compte) : non declenche par SysReg2, ou "plantage" de AppVeyor ?! -->
 		<!-- 3600 = 1 h -->
-		<!-- 3300 = 55 min -->
-		<globaltimeout s="3300"/>
+		<!-- 3480 = 58 min // essai... // SR2+L2L: 59min03s avec DPH (661), mais HS sans DPH (660) et aussi avec DPH (662) -->
+		<!-- 3465 = 57 min 45 s // SR2+L2L: 58min50s sans DPH (663), 58min43s avec DPH (665) -->
+		<!-- 3420 = 57 min // bon, maintenant/DPH / AppVeyor, myOwn: SR2_only 58min__s // SR2+L2L: 58min26s sans DPH (660) -->
+		<!-- 3360 = 56 min // A retenter ulterieurement... // AppVeyor: "Build execution time has reached the maximum allowed time for your plan (60 minutes)." -->
+		<!-- 3300 = 55 min // AppVeyor, 0.4.10-dev-126: SR2_only 56min05s, SR2+L2L 57min02s -->
+		<!-- 3300 = 55 min // AppVeyor, 0.4.10-dev-132: SR2_only 56min20s -->
+		<globaltimeout s="3465"/>
 
 		<!-- size of the hdd image in MB -->
 		<!-- 2048 = 2 GiB -->
