@@ -60,6 +60,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
 
     /* We also monitor STDIN_FILENO, so a user can cancel the process with ESC */
 /*
+// Idea? http://man7.org/linux/man-pages/man3/isatty.3.html
     if (tcgetattr(STDIN_FILENO, &ttyattr) < 0)
     {
 // AppVeyor: "tcgetattr failed with error 25".

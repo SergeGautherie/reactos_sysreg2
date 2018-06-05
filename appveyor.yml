@@ -39,6 +39,7 @@ after_build:
   - sh: ll sysreg2
 
 before_test:
+ # See https://help.ubuntu.com/lts/serverguide/libvirt.html
   - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install libvirt-bin qemu-kvm > /dev/null
 #
   - sh: mkdir TestRun
@@ -50,6 +51,8 @@ before_test:
   - sh: ll bootcdregtest.iso
 
 test_script:
+ # See https://www.gnu.org/software/bash/manual/html_node/Pipelines.html
+ # and https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html#The-Set-Builtin
   - sh: ../sysreg2 ../sysreg.xml > sysreg2.log  || echo {sysreg2} ExitStatus = $?
 
 after_test:
