@@ -6,6 +6,7 @@ environment:
   APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAtPJhVrHblWPjguvbjz4bhzO0QgvogHs8nxXFhXKpr6htEinjuaLSn2acctY/aIv9SMDiAwORisZtZ7HltUvBL0Bl3Zn+bOtqbqkcgTXj2uQJpebCT+FNaHMogbcpu+hZvztoj/59F1e9VnJDz9X32SVJwaO7F/TP7Z32Vcx9Ui+GQ3RnmmnlQI/V8NoQw0sOibnJou3MdZW6fBLIGdZ6WkWsz4SNvymXK6CA+uelVpUWa4z2GHfFSdQP4oIItYwln2FHELwTPiJLP76AyCO3VMDoHMEAjhGkGusnRHQg5oj8tLbmyO+kjW0XVC0W8AXJnkWxWbnHN83O1f+gMqM8zw==
 #
   ROS_WGET_BOOTCDREGTEST: https://iso.reactos.org/bootcdregtest/reactos-bootcdregtest-0.4.10-dev-126-gea42633-x86-gcc-lin-dbg.iso
+  ROS_WGET_LOG2LINES: https://ci.appveyor.com/api/buildjobs/akmaynfx9dplbb5b/artifacts/log2lines-557-db6eaf2-gcc
   BuildVersion: $APPVEYOR_BUILD_NUMBER-${APPVEYOR_REPO_COMMIT:0:7}-qemu
 
 version: sysreg2.appveyor.{build}
@@ -47,8 +48,13 @@ before_test:
 #
   - sh: wget --no-verbose --output-document=bootcdregtest.iso "$ROS_WGET_BOOTCDREGTEST"
   - sh: chmod u-w bootcdregtest.iso
+#
+  - sh: wget --no-verbose --output-document=log2lines "$ROS_WGET_LOG2LINES"
+  - sh: chmod u-w+x log2lines
 # 
-  - sh: ll bootcdregtest.iso
+  - sh: ll bootcdregtest.iso log2lines
+#
+  - sh: ./log2lines -d bootcdregtest.iso -F
 
 test_script:
  # See https://www.gnu.org/software/bash/manual/html_node/Pipelines.html
