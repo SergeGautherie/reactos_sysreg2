@@ -7,9 +7,11 @@ failed to initialize KVM: No such file or directory
   <name>ReactOS_AppVeyor-QEMU</name>
   <uuid>0ab69219-58c2-1e5c-6beb-fb29db74b0af</uuid>
   <!--  524288 = 512 MiB -->
+  <!--  655360 = 640 MiB -->
+  <!--  786432 = 768 MiB -->
   <!-- 1048576 =   1 GiB -->
-  <memory>524288</memory>
-  <currentMemory>524288</currentMemory>
+  <memory>786432</memory>
+  <currentMemory>786432</currentMemory>
   <vcpu>1</vcpu>
   <os>
     <type arch='i686' machine='pc'>hvm</type>
