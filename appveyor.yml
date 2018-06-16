@@ -5,11 +5,11 @@ environment:
 # PuTTY: 
   APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAtPJhVrHblWPjguvbjz4bhzO0QgvogHs8nxXFhXKpr6htEinjuaLSn2acctY/aIv9SMDiAwORisZtZ7HltUvBL0Bl3Zn+bOtqbqkcgTXj2uQJpebCT+FNaHMogbcpu+hZvztoj/59F1e9VnJDz9X32SVJwaO7F/TP7Z32Vcx9Ui+GQ3RnmmnlQI/V8NoQw0sOibnJou3MdZW6fBLIGdZ6WkWsz4SNvymXK6CA+uelVpUWa4z2GHfFSdQP4oIItYwln2FHELwTPiJLP76AyCO3VMDoHMEAjhGkGusnRHQg5oj8tLbmyO+kjW0XVC0W8AXJnkWxWbnHN83O1f+gMqM8zw==
 #
-  ROS_WGET_BOOTCDREGTEST: https://ci.appveyor.com/api/buildjobs/akmaynfx9dplbb5b/artifacts/bootcdregtest-557-db6eaf2-gcc.iso
+  ROS_WGET_BOOTCDREGTEST: https://iso.reactos.org/bootcdregtest/reactos-bootcdregtest-0.4.10-dev-231-ge4f0670-x86-gcc-lin-dbg.iso
   ROS_WGET_LOG2LINES: https://ci.appveyor.com/api/buildjobs/smk6p7xxac5kw270/artifacts/log2lines-678-e6b4a1d-gcc
   BuildVersion: $APPVEYOR_BUILD_NUMBER-${APPVEYOR_REPO_COMMIT:0:7}-qemu
 
-version: sysreg2.appveyor.{build}
+version: PublicIso.sysreg2.appveyor.{build}
 skip_branch_with_pr: true
 clone_depth: 5
 clone_folder: /sysreg2_workdir
