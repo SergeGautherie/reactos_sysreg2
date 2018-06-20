@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo Running sysreg2, through log2lines, to a log file...
+#  "sysreg2 2>&1" fctne pour les 1+(2) msgs 'libvirt', mais les msgs se melangent avec le log normal et cela n'aide pas vraiment (car asynchrone et sans raison explicite) :-|
+#  "log2lines 2>&1" n'aide pas pour les 2 msgs "svn: E155007: '/sysreg2_workdir/TestRun' is not a working copy" :-(
+# En l'etat, "2>fichier" chacun serait le "mieux", mais superflu pour le moment.
+../sysreg2 ../sysreg.xml | ./log2lines -d bootcdregtest -m -M -s 1>log2lines.log
+# Affiche bien "2 0".
+echo {sysreg2 log2lines} ExitStatus = "${PIPESTATUS[@]}"

@@ -27,6 +27,9 @@ init:
 install:
   - sh: sudo apt-get -q=2 update
   - sh: sudo DEBIAN_FRONTEND=noninteractive apt-get -q=2 install libvirt-dev libxml2-dev > /dev/null
+#
+  - sh: chmod u-w+x regtest-appveyor
+  - sh: ll regtest-appveyor
 
 # before_build:
 
@@ -61,10 +64,13 @@ before_test:
 test_script:
  # See https://www.gnu.org/software/bash/manual/html_node/Pipelines.html
  # and https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html#The-Set-Builtin
-  - sh: ../sysreg2 ../sysreg.xml > sysreg2.log  || echo {sysreg2} ExitStatus = $?
+   # " -U"
+#   - sh: ../sysreg2 ../sysreg.xml | ./log2lines -d bootcdregtest -m -M -s > log2lines.log
+#   - sh: echo {sysreg2 log2lines} ExitStatus = "${PIPESTATUS[@]}"
+  - sh: /sysreg2_workdir/regtest-appveyor  || echo {regtest-appveyor} ExitStatus = $?
 
 after_test:
-  - sh: appveyor PushArtifact sysreg2.log -FileName sysreg2-$BuildVersion.log
+  - sh: appveyor PushArtifact log2lines.log -FileName log2lines-$BuildVersion.log
 
 deploy: off
 
