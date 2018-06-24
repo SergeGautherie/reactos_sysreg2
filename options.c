@@ -91,11 +91,11 @@ bool LoadSettings(const char* XmlConfig)
         xmlXPathFreeObject(obj);
 
     /* First set current time, then add timeout value */
-    AppSettings.GlobalTimeout = time(0);
+    AppSettings.GlobalTimeoutEnd = (int)time(&AppSettings.GlobalTimeoutStart);
     obj = xmlXPathEval(BAD_CAST"number(/settings/general/globaltimeout/@s)",ctxt);
     if ((obj != NULL) && (obj->type == XPATH_NUMBER))
     {
-        AppSettings.GlobalTimeout += (int)obj->floatval;
+        AppSettings.GlobalTimeoutEnd += (int)obj->floatval;
     }
     if (obj)
         xmlXPathFreeObject(obj);

@@ -61,7 +61,9 @@ stage;
 typedef struct _Settings
 {
     int Timeout;
-    int GlobalTimeout;
+    time_t GlobalTimeoutStart;
+// ToDo: devrait etre un time_t aussi. Et adapter le code.
+    int GlobalTimeoutEnd;
     char Filename[255];
     char Name[80];
     char HardDiskImage[255];

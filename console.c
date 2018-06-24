@@ -10,6 +10,18 @@
 #include "sysreg.h"
 #define BUFFER_SIZE         512
 
+static void EnforceGlobalTimeout(int* timeout)
+{
+    int RemainingTimeout =
+      difftime((time_t)AppSettings.GlobalTimeoutEnd, time(NULL)) * 1000;
+
+    if (RemainingTimeout < *timeout)
+    {
+        // Enforce global timeout, with at least arbitrary 1,000 ms.
+        *timeout = RemainingTimeout < 1000 ? 1000 : RemainingTimeout;
+    }
+}
+
 int ProcessDebugData(const char* tty, int timeout, int stage )
 {
     char Buffer[BUFFER_SIZE];
@@ -92,6 +104,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
             { ttyfd, POLLIN | POLLHUP | POLLERR, 0 },
         };
 
+        EnforceGlobalTimeout(&timeout);
         got = poll(fds, (sizeof(fds) / sizeof(struct pollfd)), timeout);
         if (got < 0)
         {
@@ -102,21 +115,24 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
             SysregPrintf("poll failed with error %d\n", errno);
             goto cleanup;
         }
-        else if (got == 0)
+
+        /* Check for global timeout */
+        if (difftime((time_t)AppSettings.GlobalTimeoutEnd, time(NULL)) <= 0.0)
+        {
+            /* global timeout */
+// ToDo: Improve value report further?
+            SysregPrintf("global timeout (%f seconds)\n",
+                         difftime(time(NULL), AppSettings.GlobalTimeoutStart));
+            Ret = EXIT_DONT_CONTINUE;
+            goto cleanup;
+        }
+
+        if (got == 0)
         {
             /* timeout */
 // ToDo: Improve (1+3) action report. (Based on existing comments/code...)
             SysregPrintf("timeout (poll(fds), %d ms)\n", timeout);
             Ret = EXIT_CONTINUE;
-            goto cleanup;
-        }
-
-        /* Check for global timeout */
-        if (time(0) >= AppSettings.GlobalTimeout)
-        {
-            /* global timeout */
-            SysregPrintf("global timeout\n");
-            Ret = EXIT_DONT_CONTINUE;
             goto cleanup;
         }
 
@@ -258,6 +274,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                     /* If we have a call to RtlAssert(),  break once
                      * Otherwise we hit Kdbg for the first time, get a backtrace for the log
                      */
+                    EnforceGlobalTimeout(&timeout);
                     if (safewriteex(ttyfd, (Prompt ? "o\r" : "bt\r"), (Prompt ? 2 : 3), timeout) < 0
                         && errno == EWOULDBLOCK)
                     {
@@ -287,6 +304,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                         KdbgHit = 0;
 
                         /* Try to continue */
+                        EnforceGlobalTimeout(&timeout);
                         if (safewrite(ttyfd, "cont\r", timeout) < 0 && errno == EWOULDBLOCK)
                         {
                             /* timeout */
@@ -310,6 +328,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
             else if (strstr(Buffer, "--- Press q"))
             {
                 /* Send Return to get more data from Kdbg */
+                EnforceGlobalTimeout(&timeout);
                 if (safewrite(ttyfd, "\r", timeout) < 0 && errno == EWOULDBLOCK)
                 {
                     /* timeout */
