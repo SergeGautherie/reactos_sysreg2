@@ -105,7 +105,8 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
         else if (got == 0)
         {
             /* timeout */
-            SysregPrintf("timeout\n");
+// ToDo: Improve (1+3) action report. (Based on existing comments/code...)
+            SysregPrintf("timeout (poll(fds), %d ms)\n", timeout);
             Ret = EXIT_CONTINUE;
             goto cleanup;
         }
@@ -228,7 +229,8 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
 
                 if(CacheHits > AppSettings.MaxCacheHits)
                 {
-                    SysregPrintf("Test seems to be stuck in an endless loop, canceled!\n");
+                    SysregPrintf("Test seems to be stuck in an endless loop, canceled! (%u cache hits)\n",
+                                 CacheHits);
                     Ret = EXIT_CONTINUE;
                     goto cleanup;
                 }
@@ -260,7 +262,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                         && errno == EWOULDBLOCK)
                     {
                         /* timeout */
-                        SysregPrintf("timeout\n");
+                        SysregPrintf("timeout (safewriteex(\"o/bt\"), %d ms)\n", timeout);
                         Ret = EXIT_CONTINUE;
                         goto cleanup;
                         /* No need to reset Prompt here, we will quit */
@@ -288,7 +290,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                         if (safewrite(ttyfd, "cont\r", timeout) < 0 && errno == EWOULDBLOCK)
                         {
                             /* timeout */
-                            SysregPrintf("timeout\n");
+                            SysregPrintf("timeout (safewrite(\"cont\"), %d ms)\n", timeout);
                             Ret = EXIT_CONTINUE;
                             goto cleanup;
                         }
@@ -311,7 +313,7 @@ int ProcessDebugData(const char* tty, int timeout, int stage )
                 if (safewrite(ttyfd, "\r", timeout) < 0 && errno == EWOULDBLOCK)
                 {
                     /* timeout */
-                    SysregPrintf("timeout\n");
+                    SysregPrintf("timeout (safewrite(\"\\r\"), %d ms)\n", timeout);
                     Ret = EXIT_CONTINUE;
                     goto cleanup;
                 }
