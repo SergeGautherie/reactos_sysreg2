@@ -72,6 +72,9 @@ int main(int argc, char **argv)
     /* Initialize disk if needed */
     TestMachine->InitializeDisk();
 
+    printf("\n");
+    SysregPrintf("Booting machine to run stage 1\n");
+
     for(Stage = 0; Stage < NUM_STAGES; Stage++)
     {
         /* Execute hook command before stage if any */
@@ -86,7 +89,7 @@ int main(int argc, char **argv)
             }
         }
 
-        for(Retries = 0; Retries < AppSettings.MaxRetries; Retries++)
+        for (Retries = 0; Retries <= AppSettings.MaxRetries; Retries++)
         {
             struct timeval StartTime, EndTime, ElapsedTime;
 
@@ -98,7 +101,14 @@ int main(int argc, char **argv)
             }
 
             printf("\n\n\n");
-            SysregPrintf("Running stage %d...\n", Stage + 1);
+            if (Retries == 0)
+            {
+                SysregPrintf("Running stage %u...\n", Stage + 1);
+            }
+            else
+            {
+                SysregPrintf("Running stage %u retry %u...\n", Stage + 1, Retries);
+            }
             SysregPrintf("Domain %s started.\n", TestMachine->GetMachineName());
 
             gettimeofday(&StartTime, NULL);
@@ -108,6 +118,7 @@ int main(int argc, char **argv)
                 SysregPrintf("GetConsole failed!\n");
                 goto cleanup;
             }
+
             Ret = ProcessDebugData(console, AppSettings.Timeout, Stage);
 
             gettimeofday(&EndTime, NULL);
@@ -115,27 +126,51 @@ int main(int argc, char **argv)
             TestMachine->ShutdownMachine();
 
             timersub(&EndTime, &StartTime, &ElapsedTime);
-            SysregPrintf("Stage took: %ld.%06ld seconds\n", ElapsedTime.tv_sec, ElapsedTime.tv_usec);
+            if (Retries == 0)
+            {
+                SysregPrintf("Stage %u took: %ld.%06ld seconds\n",
+                             Stage + 1, ElapsedTime.tv_sec, ElapsedTime.tv_usec);
+            }
+            else
+            {
+                SysregPrintf("Stage %u retry %u took: %ld.%06ld seconds\n",
+                             Stage + 1, Retries, ElapsedTime.tv_sec, ElapsedTime.tv_usec);
+            }
 
             usleep(1000);
 
             /* If we have a checkpoint to reach for success, assume that
                the application used for running the tests (probably "rosautotest")
                continues with the next test after a VM restart. */
-            if (Ret == EXIT_CONTINUE && *AppSettings.Stage[Stage].Checkpoint)
-                SysregPrintf("Rebooting machine (retry %d)\n", Retries + 1);
-            else
+            if (Ret != EXIT_CONTINUE || !*AppSettings.Stage[Stage].Checkpoint)
+            {
                 break;
+            }
+
+            if (Retries < AppSettings.MaxRetries)
+            {
+                printf("\n");
+                SysregPrintf("Rebooting machine to run stage %u retry %u\n",
+                             Stage + 1, Retries + 1);
+            }
         }
 
-        if (Retries == AppSettings.MaxRetries)
+        if (Retries > AppSettings.MaxRetries)
         {
-            SysregPrintf("Maximum number of allowed retries exceeded, aborting!\n");
+            printf("\n");
+            SysregPrintf("Maximum number (%u) of retries reached, aborting!\n",
+                         AppSettings.MaxRetries);
             break;
         }
 
         if (Ret == EXIT_DONT_CONTINUE)
             break;
+
+        if (Stage + 1 < NUM_STAGES)
+        {
+            printf("\n");
+            SysregPrintf("Rebooting machine to run stage %u\n", Stage + 1 + 1);
+        }
     }
 
 
