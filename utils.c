@@ -94,9 +94,14 @@ void SysregPrintf(const char* format, ...)
     va_list args;
 
     printf("[SYSREG] ");
-
     va_start(args, format);
     vprintf(format, args);
+    va_end(args);
+
+    // Duplicate to stderr, to "work around" having no feedback when using a log file on AppVeyor.
+    fprintf(stderr, "[SYSREG (stderr)] ");
+    va_start(args, format);
+    vfprintf(stderr, format, args);
     va_end(args);
 }
 
