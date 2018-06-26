@@ -56,21 +56,29 @@ int main(int argc, char **argv)
     }
 
     /* Don't go any further if connection failed */
+    // SysregPrintf("(Debug) Before calling IsConnected().\n");
     if (!TestMachine->IsConnected())
     {
         SysregPrintf("Error: failed to connect to test machine.\n");
         goto cleanup;
     }
+    // SysregPrintf("(Debug) After calling IsConnected().\n");
 
     /* Shutdown the machine if already running */
+    SysregPrintf("(Debug) Before calling IsMachineRunning().\n");
+    // Car par encore démarrée.
+    // "libvirt: QEMU Driver error : Domain not found: no domain with matching name 'ReactOS_AppVeyor-QEMU'".
     if (TestMachine->IsMachineRunning(AppSettings.Name, true))
     {
         SysregPrintf("Error: Test Machine is still running.\n");
         goto cleanup;
     }
+    SysregPrintf("(Debug) After calling IsMachineRunning().\n");
 
     /* Initialize disk if needed */
+    // SysregPrintf("(Debug) Before calling InitializeDisk().\n");
     TestMachine->InitializeDisk();
+    // SysregPrintf("(Debug) After calling InitializeDisk().\n");
 
     for(Stage = 0; Stage < NUM_STAGES; Stage++)
     {
@@ -115,17 +123,23 @@ int main(int argc, char **argv)
 
             gettimeofday(&StartTime, NULL);
 
+            // SysregPrintf("(Debug) Before calling GetConsole().\n");
             if (!TestMachine->GetConsole(console))
             {
                 SysregPrintf("GetConsole failed!\n");
                 goto cleanup;
             }
+            // SysregPrintf("(Debug) After calling GetConsole().\n");
 
             Ret = ProcessDebugData(console, AppSettings.Timeout, Stage);
 
             gettimeofday(&EndTime, NULL);
 
+            SysregPrintf("(Debug) Before calling ShutdownMachine().\n");
+            // Par exemple, fin de Stage 1 et 2, car arrêt de ReactOS lui-même.
+            // "libvirt: QEMU Driver error : Requested operation is not valid: domain is not running".
             TestMachine->ShutdownMachine();
+            SysregPrintf("(Debug) After calling ShutdownMachine().\n");
 
             timersub(&EndTime, &StartTime, &ElapsedTime);
             if (Retries == 0)
