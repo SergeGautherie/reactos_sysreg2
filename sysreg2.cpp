@@ -72,11 +72,11 @@ int main(int argc, char **argv)
     /* Initialize disk if needed */
     TestMachine->InitializeDisk();
 
-    printf("\n");
-    SysregPrintf("Booting machine to run stage 1\n");
-
     for(Stage = 0; Stage < NUM_STAGES; Stage++)
     {
+        printf("\n");
+        SysregPrintf("Starting stage %u\n", Stage + 1);
+
         /* Execute hook command before stage if any */
         if (AppSettings.Stage[Stage].HookCommand[0] != '\0')
         {
@@ -93,14 +93,7 @@ int main(int argc, char **argv)
         {
             struct timeval StartTime, EndTime, ElapsedTime;
 
-            if (!TestMachine->LaunchMachine(AppSettings.Filename,
-                                            AppSettings.Stage[Stage].BootDevice))
-            {
-                SysregPrintf("LaunchMachine failed!\n");
-                goto cleanup;
-            }
-
-            printf("\n\n\n");
+            printf("\n");
             if (Retries == 0)
             {
                 SysregPrintf("Running stage %u...\n", Stage + 1);
@@ -109,6 +102,15 @@ int main(int argc, char **argv)
             {
                 SysregPrintf("Running stage %u retry %u...\n", Stage + 1, Retries);
             }
+
+            if (!TestMachine->LaunchMachine(AppSettings.Filename,
+                                            AppSettings.Stage[Stage].BootDevice))
+            {
+                SysregPrintf("LaunchMachine failed!\n");
+                goto cleanup;
+            }
+
+            printf("\n");
             SysregPrintf("Domain %s started.\n", TestMachine->GetMachineName());
 
             gettimeofday(&StartTime, NULL);
@@ -146,13 +148,6 @@ int main(int argc, char **argv)
             {
                 break;
             }
-
-            if (Retries < AppSettings.MaxRetries)
-            {
-                printf("\n");
-                SysregPrintf("Rebooting machine to run stage %u retry %u\n",
-                             Stage + 1, Retries + 1);
-            }
         }
 
         if (Retries > AppSettings.MaxRetries)
@@ -165,12 +160,6 @@ int main(int argc, char **argv)
 
         if (Ret == EXIT_DONT_CONTINUE)
             break;
-
-        if (Stage + 1 < NUM_STAGES)
-        {
-            printf("\n");
-            SysregPrintf("Rebooting machine to run stage %u\n", Stage + 1 + 1);
-        }
     }
 
 
