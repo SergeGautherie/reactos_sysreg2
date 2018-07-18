@@ -5,6 +5,7 @@
  * COPYRIGHT:   Copyright 2008-2009 Christoph von Wittich <christoph_vw@reactos.org>
  *              Copyright 2009 Colin Finck <colin@reactos.org>
  *              Copyright 2012-2015 Pierre Schweitzer <pierre@reactos.org>
+ *              Copyright 2018 Serge Gautherie <reactos-git_serge_171003@gautherie.fr>
  */
 
 #include "sysreg.h"
@@ -23,14 +24,16 @@ int main(int argc, char **argv)
     unsigned int Stage;
     Machine * TestMachine = NULL;
 
+    SysregPrintf("sysreg2 %s starting\n", gGitCommit);
+
     /* Get the output path to the built ReactOS files */
     OutputPath = getenv("ROS_OUTPUT");
     if(!OutputPath)
         OutputPath = DefaultOutputPath;
 
+    SysregPrintf("(Debug) Before calling InitializeModuleList().\n");
     InitializeModuleList();
-
-    SysregPrintf("sysreg2 %s starting\n", gGitCommit);
+    SysregPrintf("(Debug) After calling InitializeModuleList().\n");
 
     if (!LoadSettings(argc > 1 ? argv[1] : "sysreg.xml"))
     {
@@ -118,8 +121,7 @@ int main(int argc, char **argv)
                 goto cleanup;
             }
 
-            printf("\n");
-            SysregPrintf("Domain %s started.\n", TestMachine->GetMachineName());
+            SysregPrintf("LibVirt domain %s started.\n", TestMachine->GetMachineName());
 
             gettimeofday(&StartTime, NULL);
 
@@ -131,7 +133,9 @@ int main(int argc, char **argv)
             }
             // SysregPrintf("(Debug) After calling GetConsole().\n");
 
+            printf("\n");
             Ret = ProcessDebugData(console, AppSettings.Timeout, Stage);
+            printf("\n");
 
             gettimeofday(&EndTime, NULL);
 
@@ -182,6 +186,7 @@ cleanup:
 
     CleanModuleList();
 
+    printf("\n");
     switch (Ret)
     {
         case EXIT_CHECKPOINT_REACHED:
@@ -197,5 +202,7 @@ cleanup:
 
     delete TestMachine;
 
+    /* Add a blank line, as a separator in case, i.e., the output is redirected to 'log2lines -s' */
+    printf("\n");
     return Ret;
 }
